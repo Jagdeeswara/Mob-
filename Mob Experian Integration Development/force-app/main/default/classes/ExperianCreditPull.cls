@@ -3,7 +3,7 @@
  * @author            : Sudha Sardhis
  * @group             : 
  * @last modified on  : 11-18-2022
- * @last modified by  : Jhansi Al
+ * @last modified by  : Sudha Sardhis
 **/
 Public class ExperianClass{
     private final static String End_Point = 'Callout:ExperianCreditPull';
@@ -23,8 +23,11 @@ Public class ExperianClass{
 
     try{
        if(res.getStatusCode()!= 200 || res.getStatusCode() != 201) {
-        Map<String,Object> result = new Map<String,Object>();
-        result=res.getBody();
+            Map<String, Object> Result = (Map<String, Object>) JSON.deserializeUntyped(res.getBody);
+            String token_type=Result.get(token_type);
+            String accessToken = Result.get(access_token);
+            String refreshToken = Result.get(refresh_token);
+
 
 
         system.debug('The cust id '+custId);
@@ -39,8 +42,7 @@ Public class ExperianClass{
      error.pooju__Response_Code__c=ex.getStatusCode();
      insert error;
        }
-
-       
+     
     }
     public  Account  fetchcustomerDetails(Id custId){
         Account acc=[Select id,Support__c, bin__c,Model_Code__c, Comment__c Where Id=:custId];
